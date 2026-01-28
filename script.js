@@ -16,20 +16,25 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Form submission handling with web3forms
-    const form = document.querySelector('.booking-form');
+    // Form submission handling
+    const form = document.getElementById('enquiry-form');
+    const formStatus = document.getElementById('form-status');
+
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = form.querySelector('button');
             const originalText = btn.innerText;
+
+            // Show loading state
             btn.innerText = 'Sending...';
             btn.disabled = true;
 
             const formData = new FormData(form);
+            const action = form.getAttribute('action');
 
             try {
-                const response = await fetch('https://api.web3forms.com/submit', {
+                const response = await fetch(action, {
                     method: 'POST',
                     body: formData
                 });
@@ -37,26 +42,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (data.success) {
-                    btn.innerText = 'Enquiry Sent!';
-                    btn.style.backgroundColor = '#4CAF50';
+                    formStatus.innerText = "Thank you! Your enquiry has been sent. We'll be in touch soon.";
+                    formStatus.style.color = "#4CAF50";
+                    formStatus.style.marginTop = "1rem";
                     form.reset();
+                    btn.innerText = 'Sent!';
 
                     setTimeout(() => {
                         btn.innerText = originalText;
-                        btn.style.backgroundColor = '';
                         btn.disabled = false;
                     }, 3000);
                 } else {
-                    btn.innerText = 'Error - Try Again';
-                    btn.style.backgroundColor = '#ff4d4d';
+                    formStatus.innerText = data.message || "Oops! There was a problem submitting your form";
+                    formStatus.style.color = "#ff4d4d";
+                    formStatus.style.marginTop = "1rem";
+                    btn.innerText = originalText;
                     btn.disabled = false;
-                    console.error('Form submission error:', data);
                 }
             } catch (error) {
-                btn.innerText = 'Error - Try Again';
-                btn.style.backgroundColor = '#ff4d4d';
+                formStatus.innerText = "Oops! There was a problem connecting to the server.";
+                formStatus.style.color = "#ff4d4d";
+                formStatus.style.marginTop = "1rem";
+                btn.innerText = originalText;
                 btn.disabled = false;
-                console.error('Network error:', error);
             }
         });
     }

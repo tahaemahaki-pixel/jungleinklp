@@ -198,7 +198,7 @@
             <div class="container cta-card">
                 <h2>Start Your <span class="accent">Transformation</span></h2>
                 <p>Book your free, no-obligation assessment today and take the first step towards ink you'll love.</p>
-                <form class="booking-form" method="POST" action="https://api.web3forms.com/submit">
+                <form id="enquiry-form" class="booking-form" method="POST" action="https://api.web3forms.com/submit">
                     <input type="hidden" name="access_key" value="17d9ca8c-4fce-45e2-8a77-08cc7145c5e4">
                     <input type="hidden" name="subject" value="New Coverup Enquiry - Jungle Ink">
                     <input type="hidden" name="from_name" value="Jungle Ink Website">
@@ -214,6 +214,7 @@
                         <textarea name="message" placeholder="Tell us about your coverup project..." rows="4"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Enquire Now</button>
+                    <div id="form-status" class="form-status"></div>
                 </form>
             </div>
         </section>
