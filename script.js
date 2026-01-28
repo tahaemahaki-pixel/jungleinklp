@@ -16,27 +16,48 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Form submission handling (prevent default for demo)
+    // Form submission handling with web3forms
     const form = document.querySelector('.booking-form');
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = form.querySelector('button');
             const originalText = btn.innerText;
             btn.innerText = 'Sending...';
             btn.disabled = true;
 
-            setTimeout(() => {
-                btn.innerText = 'Enquiry Sent!';
-                btn.style.backgroundColor = '#4CAF50';
-                form.reset();
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.backgroundColor = '';
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    btn.innerText = 'Enquiry Sent!';
+                    btn.style.backgroundColor = '#4CAF50';
+                    form.reset();
+
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.backgroundColor = '';
+                        btn.disabled = false;
+                    }, 3000);
+                } else {
+                    btn.innerText = 'Error - Try Again';
+                    btn.style.backgroundColor = '#ff4d4d';
                     btn.disabled = false;
-                }, 3000);
-            }, 1500);
+                    console.error('Form submission error:', data);
+                }
+            } catch (error) {
+                btn.innerText = 'Error - Try Again';
+                btn.style.backgroundColor = '#ff4d4d';
+                btn.disabled = false;
+                console.error('Network error:', error);
+            }
         });
     }
 
