@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (data.success) {
-                    formStatus.innerText = "Thank you! Your enquiry has been sent. We'll be in touch soon.";
+                    formStatus.innerText = "Thank you! We'll be in touch within 24 hours to schedule your free consult.";
                     formStatus.style.color = "#4CAF50";
                     formStatus.style.marginTop = "1rem";
                     form.reset();
@@ -79,5 +79,83 @@ document.addEventListener('DOMContentLoaded', () => {
             header.style.padding = '1.5rem 0';
             header.style.background = 'rgba(5, 5, 5, 0.8)';
         }
+    });
+
+    // FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+
+        question.addEventListener('click', () => {
+            // Close other open items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                }
+            });
+
+            // Toggle current item
+            item.classList.toggle('active');
+        });
+    });
+
+    // Exit Intent Popup
+    const exitPopup = document.getElementById('exit-popup');
+    const exitClose = document.querySelector('.exit-close');
+    const exitFormLink = document.getElementById('exit-form-link');
+    let exitShown = false;
+
+    // Show popup when mouse leaves viewport (desktop only)
+    document.addEventListener('mouseout', (e) => {
+        if (!exitShown && e.clientY < 10 && window.innerWidth > 768) {
+            exitPopup.classList.add('active');
+            exitShown = true;
+            // Store in session so it doesn't show again
+            sessionStorage.setItem('exitPopupShown', 'true');
+        }
+    });
+
+    // Check if already shown this session
+    if (sessionStorage.getItem('exitPopupShown')) {
+        exitShown = true;
+    }
+
+    // Close popup handlers
+    if (exitClose) {
+        exitClose.addEventListener('click', () => {
+            exitPopup.classList.remove('active');
+        });
+    }
+
+    if (exitFormLink) {
+        exitFormLink.addEventListener('click', () => {
+            exitPopup.classList.remove('active');
+        });
+    }
+
+    // Close on background click
+    if (exitPopup) {
+        exitPopup.addEventListener('click', (e) => {
+            if (e.target === exitPopup) {
+                exitPopup.classList.remove('active');
+            }
+        });
+    }
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && exitPopup.classList.contains('active')) {
+            exitPopup.classList.remove('active');
+        }
+    });
+
+    // Smooth scroll for sticky CTA (close popup if clicking form link)
+    document.querySelectorAll('a[href="#book"]').forEach(link => {
+        link.addEventListener('click', () => {
+            if (exitPopup && exitPopup.classList.contains('active')) {
+                exitPopup.classList.remove('active');
+            }
+        });
     });
 });
