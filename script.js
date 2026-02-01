@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic month for urgency banner
+    const monthEl = document.getElementById('current-month');
+    if (monthEl) {
+        const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+        monthEl.textContent = months[new Date().getMonth()];
+    }
+
     // Intersection Observer for scroll animations
     const observerOptions = {
         threshold: 0.1
