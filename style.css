@@ -1018,6 +1018,7 @@ footer {
 
 /* Chat Bubble */
 .whatsapp-bubble {
+    display: block;
     background: #fff;
     color: #333;
     padding: 14px 18px;
@@ -1031,7 +1032,14 @@ footer {
     animation: bubbleSlideIn 0.4s ease-out;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.whatsapp-bubble:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
 }
 
 .whatsapp-bubble.hidden {
