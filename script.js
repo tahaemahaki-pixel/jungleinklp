@@ -166,4 +166,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // WhatsApp Chat Bubble
+    const whatsappBubble = document.getElementById('whatsapp-bubble');
+    const bubbleClose = document.getElementById('bubble-close');
+
+    if (whatsappBubble && bubbleClose) {
+        // Check if bubble was dismissed this session
+        if (sessionStorage.getItem('whatsappBubbleClosed')) {
+            whatsappBubble.classList.add('hidden');
+        } else {
+            // Show bubble after 3 seconds
+            whatsappBubble.classList.add('hidden');
+            setTimeout(() => {
+                whatsappBubble.classList.remove('hidden');
+            }, 3000);
+        }
+
+        // Close bubble on X click
+        bubbleClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            whatsappBubble.classList.add('hidden');
+            sessionStorage.setItem('whatsappBubbleClosed', 'true');
+        });
+    }
 });
